@@ -1,0 +1,51 @@
+# ── .NET build outputs ────────────────────────────────────────────────────────
+bin/
+obj/
+artifacts/
+publish/
+*.nupkg
+*.snupkg
+
+# ── Secrets — never commit ────────────────────────────────────────────────────
+.env
+**/secrets.json
+appsettings.Production.json
+appsettings.Staging.json
+
+# ── Visual Studio ─────────────────────────────────────────────────────────────
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+*.rsuser
+
+# ── JetBrains Rider ───────────────────────────────────────────────────────────
+.idea/
+*.DotSettings.user
+
+# ── VS Code ───────────────────────────────────────────────────────────────────
+.vscode/
+
+# ── Claude Code ───────────────────────────────────────────────────────────────
+.claude/
+
+# ── Test results and coverage ─────────────────────────────────────────────────
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+out/
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Disabled projects (re-enable by removing these lines) ─────────────────────
+src/MiniPayment.Reconciliation/
+tests/MiniPayment.Reconciliation.UnitTests/

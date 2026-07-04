@@ -1,0 +1,158 @@
+{
+  "info": {
+    "name": "Mini Payment API",
+    "_postman_id": "minipayment-collection-v1",
+    "description": "Collection for testing the Mini Payment API (Assignment 1).\n\nFlow:\n1. Run 'Mint Dev Token' to obtain a JWT.\n2. The token is automatically stored in the `jwt_token` collection variable.\n3. Run 'Pay - Approved (10.00)' or 'Pay - Declined (10.05)' to test the payment logic.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8080", "type": "string" },
+    { "key": "jwt_token", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Mint Dev Token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();",
+              "pm.collectionVariables.set('jwt_token', json.access_token);",
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "pm.test('Token received', () => pm.expect(json.access_token).to.be.a('string'));"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/v1/dev/token",
+        "header": []
+      }
+    },
+    {
+      "name": "Pay — Approved (amount 10.00)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "const json = pm.response.json();",
+              "pm.test('Status APPROVED', () => pm.expect(json.status).to.eql('APPROVED'));",
+              "pm.test('Response code 00', () => pm.expect(json.response_code).to.eql('00'));",
+              "pm.test('Has transaction_id', () => pm.expect(json.transaction_id).to.be.a('string'));"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/v1/pay",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"order_number\": \"ORD-APPROVED-001\",\n  \"card_number\": \"4111111111111111\",\n  \"expiry_date\": \"12/29\",\n  \"cvv\": \"123\",\n  \"currency\": \"USD\",\n  \"cardholder_name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"amount\": 10.00\n}",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "Pay — Declined (amount 10.05)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "const json = pm.response.json();",
+              "pm.test('Status DECLINED', () => pm.expect(json.status).to.eql('DECLINED'));",
+              "pm.test('Response code 05', () => pm.expect(json.response_code).to.eql('05'));",
+              "pm.test('Has transaction_id', () => pm.expect(json.transaction_id).to.be.a('string'));"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/v1/pay",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"order_number\": \"ORD-DECLINED-001\",\n  \"card_number\": \"4111111111111111\",\n  \"expiry_date\": \"12/29\",\n  \"cvv\": \"123\",\n  \"currency\": \"USD\",\n  \"cardholder_name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"amount\": 10.05\n}",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "Pay — Validation Error (bad card)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 422', () => pm.response.to.have.status(422));",
+              "const json = pm.response.json();",
+              "pm.test('Has errors', () => pm.expect(json.errors).to.exist);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/v1/pay",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"order_number\": \"ORD-VAL-001\",\n  \"card_number\": \"0000000000000000\",\n  \"expiry_date\": \"12/29\",\n  \"cvv\": \"123\",\n  \"currency\": \"USD\",\n  \"cardholder_name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"amount\": 10.00\n}",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    },
+    {
+      "name": "Pay — Idempotency (repeat ORD-APPROVED-001)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "pm.test('Same transaction_id as first call', () => {",
+              "  const json = pm.response.json();",
+              "  pm.expect(json.transaction_id).to.be.a('string');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/v1/pay",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"order_number\": \"ORD-APPROVED-001\",\n  \"card_number\": \"4111111111111111\",\n  \"expiry_date\": \"12/29\",\n  \"cvv\": \"123\",\n  \"currency\": \"USD\",\n  \"cardholder_name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"amount\": 10.00\n}",
+          "options": { "raw": { "language": "json" } }
+        }
+      }
+    }
+  ]
+}

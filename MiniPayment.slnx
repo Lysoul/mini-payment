@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MiniPayment.Api/MiniPayment.Api.csproj" />
+    <Project Path="src/MiniPayment.Application/MiniPayment.Application.csproj" />
+    <Project Path="src/MiniPayment.Domain/MiniPayment.Domain.csproj" />
+    <Project Path="src/MiniPayment.Infrastructure/MiniPayment.Infrastructure.csproj" />
+    <Project Path="src/MiniPayment.Reconciliation/MiniPayment.Reconciliation.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MiniPayment.Api.IntegrationTests/MiniPayment.Api.IntegrationTests.csproj" />
+    <Project Path="tests/MiniPayment.Application.UnitTests/MiniPayment.Application.UnitTests.csproj" />
+    <Project Path="tests/MiniPayment.Reconciliation.UnitTests/MiniPayment.Reconciliation.UnitTests.csproj" />
+  </Folder>
+</Solution>
