@@ -48,7 +48,8 @@ public sealed class CardNumber : IDisposable
             sum += digit;
             doubleIt = !doubleIt;
         }
-        return sum % 10 == 0;
+        // sum > 0 rejects the all-zero PAN, which is divisible by 10 but not a valid card.
+        return sum > 0 && sum % 10 == 0;
     }
 
     public void Dispose()

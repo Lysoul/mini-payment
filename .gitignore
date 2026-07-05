@@ -46,6 +46,3 @@ logs/
 Thumbs.db
 desktop.ini
 
-# ── Disabled projects (re-enable by removing these lines) ─────────────────────
-src/MiniPayment.Reconciliation/
-tests/MiniPayment.Reconciliation.UnitTests/
