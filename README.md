@@ -149,7 +149,7 @@ Expected: `"status": "DECLINED"`, `"response_code": "05"`
 
 ### Postman
 
-Import `docs/MiniPayment.postman_collection.json` into Postman.  
+Import `docs/postman/MiniPayment.postman_collection.json` into Postman.  
 Set the `base_url` collection variable to `http://localhost:8080`, then run **Mint Dev Token** first.
 
 ---
