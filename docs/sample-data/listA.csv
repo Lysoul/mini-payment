@@ -1,6 +1,0 @@
-OrderNumber,Date,Amount,Currency,Description
-ORD-001,2024-01-01,100.00,USD,Widget purchase
-ORD-002,2024-01-02,200.50,EUR,Service fee
-ORD-003,2024-01-03,300.00,GBP,Software license
-ORD-004,2024-01-04,50.00,USD,Shipping
-ORD-005,2024-01-05,999.99,JPY,Hardware

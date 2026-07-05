@@ -40,10 +40,12 @@ public class ProcessPaymentCommandValidatorTests
         _sut.Validate(cmd).IsValid.Should().BeFalse();
     }
 
-    [Fact]
-    public void CardNumber_FailsLuhn_Fails()
+    [Theory]
+    [InlineData("1234567890123456")]  // arbitrary non-Luhn PAN
+    [InlineData("0000000000000000")]  // all zeros — mathematically divisible by 10 but not a valid card
+    public void CardNumber_FailsLuhn_Fails(string cardNumber)
     {
-        var cmd = ValidCommand() with { CardNumber = "1234567890123456" };
+        var cmd = ValidCommand() with { CardNumber = cardNumber };
         _sut.Validate(cmd).IsValid.Should().BeFalse();
     }
 

@@ -1,7 +1,7 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MiniPayment.Application.Common.Abstractions;
+using MiniPayment.Application.Common.Exceptions;
 using MiniPayment.Domain.Entities;
 using MiniPayment.Domain.Enums;
 using MiniPayment.Domain.ValueObjects;
@@ -60,9 +60,9 @@ public sealed class ProcessPaymentCommandHandler(
         {
             await repository.AddAsync(transaction, cancellationToken);
         }
-        catch (DbUpdateException)
+        catch (DuplicateOrderException)
         {
-            // Concurrent duplicate — re-read and return the winner's stored data
+            // Concurrent duplicate — unique constraint lost the race; return the winner's stored row
             var winner = await repository.GetByOrderNumberAsync(request.OrderNumber, cancellationToken);
             return ToResult(winner!);
         }

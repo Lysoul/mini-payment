@@ -1,5 +1,0 @@
-InvoiceNumber,Date,Amount,Currency,Description
-ORD-001,2024-01-01,100.00,USD,Widget purchase
-ORD-003,2024-01-03,300.00,GBP,Software license
-ORD-006,2024-01-06,450.00,USD,Consulting
-ORD-007,2024-01-07,75.00,EUR,Support
